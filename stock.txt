@@ -1,0 +1,7 @@
+medicine id;qty;exp date(dd.mm.yyyy);store id
+id 1;500;12.01.2021;store id 1
+id 2;600;20.05.2021;store id 2
+id 1;400;21.06.2021;store id 3
+id 1;500;12.01.2021;store id 1
+id 1;500;12.01.2021;store id 1
+id 1;500;12.01.2021;store id 1

@@ -1,0 +1,12 @@
+name;id;weight in mg
+medicine name 1;id 1;1
+medicine name 2;id 2;1
+medicine name 3;id 3;1
+medicine name 5;id 4;1
+medicine name 153;id 5;1
+medicine name 1231;id 6;1
+medicine name 1321;id 7;1
+medicine name 142;id 8;1
+medicine name 142;id 9;1
+medicine name 121;id 10;1
+medicine name 113;id 11;1
