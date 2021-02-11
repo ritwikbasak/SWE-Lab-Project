@@ -69,14 +69,18 @@ public class StoreManager {
             assert(locationFlag == true);
         }
         
-        //test one record
-        assert(testManager.storeList.get(0).getName().equals("store 1"));
+        //test if all the store IDs are from the file "account.txt"
+        ArrayList<Account> accList = new AccountManager().getAllAccounts();
+        for(Store i : testManager.storeList){
+            boolean flag = false;
+            for(Account j : accList)
+                if(j.isIsChemist() && i.getStoreId().equals(j.getLoginId()))
+                    flag = true;
+            assert(flag == true);
+        }
         
-        //display chemist UI
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new ChemistUI().setVisible(true);
-            }
-        });
+        //test one record
+        assert(testManager.storeList.get(0).getStoreName().equals("s1"));
+        
     }
 }

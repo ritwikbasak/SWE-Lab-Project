@@ -1,3 +1,5 @@
-store name;chemist name;email;mobile no.;password;store location
-store 1;chem 1;ritwikbasak14@gmail.com;+916290854076;xxxxx;SALT LAKE
-store 2;chem 2;abc@xyz.com;9999900000;xxxxx;HOWRAH
+login ID/store ID;isChemist;email;mobile no.;password;location
+sID 1;true;email1@email.com;+919999900000;xxxxx;HOWRAH
+login 2;false;email2@email.com;+919999900000;xxxxx;SALT LAKE
+sID 3;true;email3@email.com;+919999900000;xxxxx;NEW TOWN
+sID 2;true;email3@email.com;+919999900000;xxxxx;NEW TOWN

@@ -25,11 +25,23 @@ public class AccountManager {
             System.out.println(e.getMessage());
         }
     }
+    public void addCustomerAccount(String loginId, String email, String mobileNo, String password, String location) {
+        accountList.add(new Account(loginId, email, mobileNo, password, location, false));
+    }
+    public Account searchByLoginId(String id){
+        for(Account acc : accountList)
+            if(acc.getLoginId().equals(id))
+                return acc;
+        return null;
+    }
+    public ArrayList<Account> getAllAccounts(){
+        return new ArrayList<>(accountList);
+    }
     public static void main(String[] args){
         AccountManager testManager = new AccountManager();
         
         //test number of records in file
-        assert(testManager.accountList.size() == 2);
+        assert(testManager.accountList.size() == 4);
         
     }
 }

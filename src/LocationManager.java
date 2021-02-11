@@ -36,15 +36,21 @@ public class LocationManager {
     public static String getLocation(int index){
         return LOCATIONS[index];
     }
+    public static int getIndex(String location){
+        for(int i = 0; i < LocationManager.size(); i ++)
+            if(LOCATIONS[i].equalsIgnoreCase(location.trim()))
+                return i;
+        return -1;
+    }
     public static double getDistance(String locationOne, String locationTwo){
         int index1 = -1, index2 = -1;
         for(int i = 0; i < LocationManager.size(); i ++)
-            if(LocationManager.getLocation(i).equals(locationOne)){
+            if(LocationManager.getLocation(i).equals(locationOne.trim())){
                 index1 = i;
                 break;
             }
         for(int i = 0; i < LocationManager.size(); i ++)
-            if(LocationManager.getLocation(i).equals(locationTwo)){
+            if(LocationManager.getLocation(i).equals(locationTwo.trim())){
                 index2 = i;
                 break;
             }

@@ -1,4 +1,4 @@
-store name;store location;store id;isStoreVerified
-store 1;SALT LAKE;store id 1;true
-store 2;HOWRAH;store id 2;false
-store 1;SALT LAKE;store id 3;true
+store name;store location;store id;is Store Verified
+s1;SALT LAKE;sID 1;true
+s2;HOWRAH;sID 2;false
+s1;SALT LAKE;sID 3;true

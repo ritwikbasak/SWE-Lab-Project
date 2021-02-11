@@ -19,12 +19,26 @@ public class ChemistUI extends javax.swing.JFrame {
     private StoreManager  storeMgr = new StoreManager();
     private MedicineManager medMgr = new MedicineManager();
     private StockManager stockMgr = new StockManager();
-    private String storeId = "store id 1";
-    private ArrayList<Stock> storeStock = stockMgr.getStock(storeId);
+    private String storeId = "sID 1";
+
+    public void setStoreId(String storeId) {
+        this.storeId = storeId;
+    }
+    
+    private ArrayList<Stock> storeStock ;
     private int current = 0;
+    
     /**
      * Creates new form ChemistUI
      */
+    private void refreshStock(){
+        storeStock = stockMgr.getStock(storeId);
+        ArrayList<Stock> nonEmpty = new ArrayList<>();
+        for(Stock i : storeStock)
+            if(i.getQuantity() != 0)
+                nonEmpty.add(i);
+        storeStock = nonEmpty;
+    }
     private void lookSettingCode(){
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -37,7 +51,7 @@ public class ChemistUI extends javax.swing.JFrame {
     }
     private void clearFields(){
         medicineNameField.setText("");
-        medicineField.setText("");
+        medicineIdField.setText("");
         quantityField.setText("");
         DDField.setText("");
         MMField.setText("");
@@ -49,7 +63,7 @@ public class ChemistUI extends javax.swing.JFrame {
         quantityLabel.setVisible(show);
         expiryLabel.setVisible(show);
         medicineNameField.setVisible(show);
-        medicineField.setVisible(show);
+        medicineIdField.setVisible(show);
         quantityField.setVisible(show);
         DDField.setVisible(show);
         MMField.setVisible(show);
@@ -87,7 +101,7 @@ public class ChemistUI extends javax.swing.JFrame {
         return true;
     }
     private boolean medicineError(){
-        if(medicineField.getText().length() != 0 && medMgr.searchById(medicineField.getText()) != null)
+        if(medicineIdField.getText().length() != 0 && medMgr.searchById(medicineIdField.getText()) != null)
         {
             medicineError.setVisible(false);
             medicineNameError.setVisible(false);
@@ -99,10 +113,10 @@ public class ChemistUI extends javax.swing.JFrame {
     }
     private boolean quantityError(){
         int temp = 0;
-        try{
+        if(quantityField.getText().length() != 0)
             temp = Integer.parseInt(quantityField.getText());
-        }
-        catch(Exception e){}
+        else
+            quantityField.setText("0");
         if(quantityField.getText().length() != 0 && (temp > 0 || (updateInventorySaveButton.getText().equals("Done Editing") && temp >= 0)))
         {
             quantityError.setVisible(false);
@@ -125,23 +139,32 @@ public class ChemistUI extends javax.swing.JFrame {
     }
     public ChemistUI() {
         lookSettingCode();
+        
         initComponents();
         setResizable(false);
+        
+        refreshStock();
         initializeUpdateInventory();
+        
         locationErrorLabel.setVisible(false);
+        
         storeNameField.addFocusListener(new FocusAdapter(){
             public void focusLost(FocusEvent fe){
-                if(storeNameField.getText().length() == 0) storeNameError.setVisible(true);
-                else storeNameError.setVisible(false);
+                storeNameError();
             }
         });
-        storeNameField.setText(storeMgr.searchById(storeId).getName());
+        
+        storeNameField.setText(storeMgr.searchById(storeId).getStoreName());
+        storeIdField.setText(storeId);
+        
         storeNameError.setVisible(false);
+        
         String locationList[] = new String[LocationManager.size() + 1];
         locationList[0] = "NO LOCATION SELECTED";
         for(int i = 0; i < LocationManager.size(); i ++)
             locationList[i + 1] = LocationManager.getLocation(i);
         locationDropdown.setModel(new javax.swing.DefaultComboBoxModel<>(locationList));
+        locationDropdown.setSelectedIndex(LocationManager.getIndex(storeMgr.searchById(storeId).getLocation()) + 1);
     }
     
     /**
@@ -162,13 +185,13 @@ public class ChemistUI extends javax.swing.JFrame {
         locationErrorLabel = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        storeIdField = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         updateInventoryPane = new javax.swing.JPanel();
         previousButton = new javax.swing.JButton();
         nextButton = new javax.swing.JButton();
         medicineNameField = new javax.swing.JTextField();
-        medicineField = new javax.swing.JTextField();
+        medicineIdField = new javax.swing.JTextField();
         quantityField = new javax.swing.JTextField();
         medicineNameLabel = new javax.swing.JLabel();
         medicineLabel = new javax.swing.JLabel();
@@ -232,10 +255,10 @@ public class ChemistUI extends javax.swing.JFrame {
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setText("Store ID");
 
-        jTextField1.setEditable(false);
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        storeIdField.setEditable(false);
+        storeIdField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                storeIdFieldActionPerformed(evt);
             }
         });
 
@@ -270,7 +293,7 @@ public class ChemistUI extends javax.swing.JFrame {
                         .addGroup(modifyDetailsPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addComponent(locationDropdown, javax.swing.GroupLayout.Alignment.LEADING, 0, 202, Short.MAX_VALUE)
                             .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.Alignment.LEADING))
+                            .addComponent(storeIdField, javax.swing.GroupLayout.Alignment.LEADING))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         modifyDetailsPaneLayout.setVerticalGroup(
@@ -285,7 +308,7 @@ public class ChemistUI extends javax.swing.JFrame {
                 .addGap(44, 44, 44)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(storeIdField, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(56, 56, 56)
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -335,19 +358,19 @@ public class ChemistUI extends javax.swing.JFrame {
             }
         });
 
-        medicineField.addFocusListener(new java.awt.event.FocusAdapter() {
+        medicineIdField.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusLost(java.awt.event.FocusEvent evt) {
-                medicineFieldFocusLost(evt);
+                medicineIdFieldFocusLost(evt);
             }
         });
-        medicineField.addActionListener(new java.awt.event.ActionListener() {
+        medicineIdField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                medicineFieldActionPerformed(evt);
+                medicineIdFieldActionPerformed(evt);
             }
         });
-        medicineField.addKeyListener(new java.awt.event.KeyAdapter() {
+        medicineIdField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                medicineFieldKeyPressed(evt);
+                medicineIdFieldKeyPressed(evt);
             }
         });
 
@@ -493,7 +516,7 @@ public class ChemistUI extends javax.swing.JFrame {
                                     .addComponent(YYYYField, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addGroup(updateInventoryPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(quantityField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 120, Short.MAX_VALUE)
-                                .addComponent(medicineField, javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(medicineIdField, javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(medicineNameField, javax.swing.GroupLayout.Alignment.LEADING))))
                     .addGroup(updateInventoryPaneLayout.createSequentialGroup()
                         .addGap(273, 273, 273)
@@ -517,7 +540,7 @@ public class ChemistUI extends javax.swing.JFrame {
                 .addGap(20, 20, 20)
                 .addComponent(medicineLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(medicineField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(medicineIdField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(medicineError)
                 .addGap(23, 23, 23)
@@ -587,24 +610,36 @@ public class ChemistUI extends javax.swing.JFrame {
 
     private void locationDropdownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_locationDropdownActionPerformed
         // TODO add your handling code here:
-        String temp = locationDropdown.getItemAt(locationDropdown.getSelectedIndex());
-        if(temp.equals("NO LOCATION SELECTED")) locationErrorLabel.setVisible(true);
-        else locationErrorLabel.setVisible(false);
+        locationError();
     }//GEN-LAST:event_locationDropdownActionPerformed
 
     private void saveButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveButtonMouseClicked
         // TODO add your handling code here:
-        boolean flag = false;
-        String temp = locationDropdown.getItemAt(locationDropdown.getSelectedIndex());
-        if(temp.equals("NO LOCATION SELECTED")) {locationErrorLabel.setVisible(true); flag = true;}
-        if(storeNameField.getText().length() == 0) {storeNameError.setVisible(true); flag = true;}
-        if(flag) return;
+        if(storeNameError() | locationError()) return;
         Store tempStore = storeMgr.searchById(storeId);
-        tempStore.setName(storeNameField.getText());
-        tempStore.setLocation(temp);
+        tempStore.setStoreName(storeNameField.getText());
+        tempStore.setLocation(locationDropdown.getItemAt(locationDropdown.getSelectedIndex()));
         JOptionPane.showMessageDialog(this, "Changes have been saved");
     }//GEN-LAST:event_saveButtonMouseClicked
 
+    private boolean storeNameError(){
+        if(storeNameField.getText().length() == 0){
+            storeNameError.setVisible(true);
+            return true;
+        }
+        storeNameError.setVisible(false);
+        return false;
+    }
+    private boolean locationError(){
+        String temp = locationDropdown.getItemAt(locationDropdown.getSelectedIndex());
+        if(temp.equals("NO LOCATION SELECTED")){
+            locationErrorLabel.setVisible(true);
+            return true;
+        }
+        locationErrorLabel.setVisible(false);
+        return false;
+    }
+    
     private void saveButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_saveButtonActionPerformed
@@ -621,9 +656,9 @@ public class ChemistUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_DDFieldActionPerformed
 
-    private void medicineFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_medicineFieldActionPerformed
+    private void medicineIdFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_medicineIdFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_medicineFieldActionPerformed
+    }//GEN-LAST:event_medicineIdFieldActionPerformed
 
     private void medicineNameFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_medicineNameFieldKeyPressed
         // TODO add your handling code here:
@@ -633,13 +668,13 @@ public class ChemistUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_medicineNameFieldKeyPressed
 
-    private void medicineFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_medicineFieldKeyPressed
+    private void medicineIdFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_medicineIdFieldKeyPressed
         // TODO add your handling code here:
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
-            medicineField.setFocusable(false);
-            medicineField.setFocusable(true);
+            medicineIdField.setFocusable(false);
+            medicineIdField.setFocusable(true);
         }
-    }//GEN-LAST:event_medicineFieldKeyPressed
+    }//GEN-LAST:event_medicineIdFieldKeyPressed
 
     private void quantityFieldKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_quantityFieldKeyPressed
         // TODO add your handling code here:
@@ -677,12 +712,12 @@ public class ChemistUI extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_medicineNameFieldFocusLost
 
-    private void medicineFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_medicineFieldFocusLost
+    private void medicineIdFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_medicineIdFieldFocusLost
         // TODO add your handling code here:
         boolean flag = medicineError();
         if(flag == false)
-            medicineNameField.setText(medMgr.searchById(medicineField.getText()).getName());
-    }//GEN-LAST:event_medicineFieldFocusLost
+            medicineNameField.setText(medMgr.searchById(medicineIdField.getText()).getName());
+    }//GEN-LAST:event_medicineIdFieldFocusLost
 
     private void quantityFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_quantityFieldFocusLost
         // TODO add your handling code here:
@@ -723,16 +758,13 @@ public class ChemistUI extends javax.swing.JFrame {
             return;
         String temp = updateInventorySaveButton.getText();
         if(temp.equals("Done Editing")){
-            ArrayList<Stock> nonEmpty = new ArrayList<>();
-            for(Stock i : storeStock)
-                if(i.getQuantity() != 0)
-                    nonEmpty.add(i);
-            storeStock = nonEmpty;
-            medicineField.setEditable(true);
+            refreshStock();
+            medicineIdField.setEditable(true);
             updateInventorySaveButton.setText("Save");
         }
         else{
-            stockMgr.addStock(medicineField.getText(), storeId, Integer.parseInt(quantityField.getText()), LocalDate.of(Integer.parseInt(YYYYField.getText()), Integer.parseInt(MMField.getText()), Integer.parseInt(DDField.getText())));
+            stockMgr.addStock(medicineIdField.getText(), storeId, Integer.parseInt(quantityField.getText()), LocalDate.of(Integer.parseInt(YYYYField.getText()), Integer.parseInt(MMField.getText()), Integer.parseInt(DDField.getText())));
+            refreshStock();
         }
         hideAll();
         clearFields();
@@ -743,7 +775,7 @@ public class ChemistUI extends javax.swing.JFrame {
     private void displayCurrentStock(){
         Stock currentStock = storeStock.get(current);
         medicineNameField.setText(medMgr.searchById(currentStock.getMedicineId()).getName());
-        medicineField.setText(currentStock.getMedicineId());
+        medicineIdField.setText(currentStock.getMedicineId());
         quantityField.setText(currentStock.getQuantity() + "");
         LocalDate currentDate = currentStock.getDate();
         DDField.setText(currentDate.getDayOfMonth() + "");
@@ -760,7 +792,8 @@ public class ChemistUI extends javax.swing.JFrame {
     }
     private void editButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editButtonMouseClicked
         // TODO add your handling code here:
-        medicineField.setEditable(false);
+        current = 0;
+        medicineIdField.setEditable(false);
         addButton.setVisible(false);
         editButton.setVisible(false);
         displayCurrentStock();
@@ -792,9 +825,9 @@ public class ChemistUI extends javax.swing.JFrame {
         displayCurrentStock();
     }//GEN-LAST:event_nextButtonMouseClicked
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void storeIdFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_storeIdFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_storeIdFieldActionPerformed
 
     /**
      * @param args the command line arguments
@@ -823,11 +856,10 @@ public class ChemistUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JComboBox<String> locationDropdown;
     private javax.swing.JLabel locationErrorLabel;
     private javax.swing.JLabel medicineError;
-    private javax.swing.JTextField medicineField;
+    private javax.swing.JTextField medicineIdField;
     private javax.swing.JLabel medicineLabel;
     private javax.swing.JLabel medicineNameError;
     private javax.swing.JTextField medicineNameField;
@@ -839,6 +871,7 @@ public class ChemistUI extends javax.swing.JFrame {
     private javax.swing.JTextField quantityField;
     private javax.swing.JLabel quantityLabel;
     private javax.swing.JButton saveButton;
+    private javax.swing.JTextField storeIdField;
     private javax.swing.JLabel storeNameError;
     private javax.swing.JTextField storeNameField;
     private javax.swing.JTabbedPane tabbedPane1;
