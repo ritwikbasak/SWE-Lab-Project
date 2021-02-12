@@ -617,6 +617,7 @@ public class ChemistUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         if(storeNameError() | locationError()) return;
         Store tempStore = storeMgr.searchById(storeId);
+        tempStore.setIsVerified(false);
         tempStore.setStoreName(storeNameField.getText());
         tempStore.setLocation(locationDropdown.getItemAt(locationDropdown.getSelectedIndex()));
         JOptionPane.showMessageDialog(this, "Changes have been saved");
