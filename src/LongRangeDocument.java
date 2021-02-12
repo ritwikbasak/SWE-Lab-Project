@@ -6,12 +6,19 @@ import javax.swing.text.*;
 class LongRangeDocument extends PlainDocument {
 
   private long minimum, maximum;
+  private boolean allow;
 
   long currentValue = 0;
 
+  public LongRangeDocument(long minimum, long maximum, boolean allow) {
+    this.minimum = minimum;
+    this.maximum = maximum;
+    this.allow = allow;
+  }
   public LongRangeDocument(long minimum, long maximum) {
     this.minimum = minimum;
     this.maximum = maximum;
+    this.allow = false;
   }
 
   public long getValue() {
@@ -59,6 +66,8 @@ class LongRangeDocument extends PlainDocument {
 
   public long checkInput(String proposedValue) throws NumberFormatException {
     long newValue = 0;
+    if(allow && proposedValue.equals("+"))
+        return newValue;
     if (proposedValue.length() > 0) {
       newValue = Long.parseLong(proposedValue);
     }

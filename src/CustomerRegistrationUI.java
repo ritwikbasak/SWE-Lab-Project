@@ -39,7 +39,7 @@ public class CustomerRegistrationUI extends javax.swing.JFrame {
         
         initComponents();
         
-        mobileField.setDocument(new LongRangeDocument(0, Long.MAX_VALUE));
+        mobileField.setDocument(new LongRangeDocument(0, Long.MAX_VALUE, true));
         
         String locationList[] = new String[LocationManager.size() + 1];
         locationList[0] = "NO LOCATION SELECTED";
@@ -341,6 +341,8 @@ public class CustomerRegistrationUI extends javax.swing.JFrame {
     }
     private boolean mobileError(){
         String temp = mobileField.getText();
+        if(temp.equals("+"))
+            mobileField.setText("0");
         if(temp.length() != 10 && !(temp.length() == 13 && temp.substring(0,3).equals("+91"))){
             mobileError.setVisible(true);
             return true;
