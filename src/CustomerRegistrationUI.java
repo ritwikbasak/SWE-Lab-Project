@@ -18,10 +18,10 @@ import javax.swing.JOptionPane;
  *
  * @author Ritwik Basak
  */
-public class CustomerRegistrationFrame extends javax.swing.JFrame {
+public class CustomerRegistrationUI extends javax.swing.JFrame {
 
     /**
-     * Creates new form CustomerRegistrationFrame
+     * Creates new form CustomerRegistrationUI
      */
     private AccountManager accMgr = new AccountManager();
     private void lookSettingCode(){
@@ -34,7 +34,7 @@ public class CustomerRegistrationFrame extends javax.swing.JFrame {
             }
         } catch (Exception e) {}
     }
-    public CustomerRegistrationFrame() {
+    public CustomerRegistrationUI() {
         lookSettingCode();
         
         initComponents();
@@ -318,6 +318,12 @@ public class CustomerRegistrationFrame extends javax.swing.JFrame {
 
     private boolean loginError(){
         if(loginField.getText().length() == 0){
+            loginError.setText("This field cannot be empty");
+            loginError.setVisible(true);
+            return true;
+        }
+        if(accMgr.searchByLoginId(loginField.getText()) != null){
+            loginError.setText("Username Already Present");
             loginError.setVisible(true);
             return true;
         }
@@ -383,7 +389,7 @@ public class CustomerRegistrationFrame extends javax.swing.JFrame {
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new CustomerRegistrationFrame().setVisible(true);
+                new CustomerRegistrationUI().setVisible(true);
             }
         });
     }
