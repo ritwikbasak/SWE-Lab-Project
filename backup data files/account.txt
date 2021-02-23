@@ -1,0 +1,5 @@
+login ID/store ID;isChemist;email;mobile no.;password;location
+sID 1;true;email1@email.com;+919999900000;xxxxx;HOWRAH
+login 2;false;email2@email.com;+919999900000;xxxxx;SALT LAKE
+sID 3;true;email3@email.com;+919999900000;xxxxx;NEW TOWN
+sID 2;true;email3@email.com;+919999900000;xxxxx;NEW TOWN

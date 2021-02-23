@@ -1,0 +1,4 @@
+store name;store location;store id;is Store Verified
+s1;SALT LAKE;sID 1;true
+s2;HOWRAH;sID 2;false
+s1;SALT LAKE;sID 3;true

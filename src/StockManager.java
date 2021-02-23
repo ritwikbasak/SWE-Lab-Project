@@ -8,8 +8,15 @@ import java.time.LocalDate;
 public class StockManager {
     private ArrayList<Stock> stockList;
     private String infoLine;
-    
-    public void writeToFile(){
+    private SystemManager sysMgr;
+    public ArrayList<Stock> getParticularStock(String storeId, String medId){
+        ArrayList<Stock> medStock = new ArrayList<>();
+        for(Stock i : stockList)
+            if(i.getMedicineId().equals(medId.trim()) && i.getStoreId().equals(storeId.trim()))
+                medStock.add(i);
+        return medStock;
+    }
+    public boolean writeToFile(){
         try(FileWriter writer = new FileWriter("stock.txt");){
             writer.write(infoLine + "\n");
             for(Stock i : stockList)
@@ -18,16 +25,18 @@ public class StockManager {
         }
         catch(IOException e){
             System.out.println(e.getMessage());
+            return false;
         }
+        return true;
     }
     public ArrayList<Stock> searchByMedicineId(String medId){
         ArrayList<Stock> medStock = new ArrayList<>();
         for(Stock i : stockList)
-            if(i.getMedicineId().equals(medId))
+            if(i.getMedicineId().equals(medId.trim()))
                 medStock.add(i);
         return medStock;
     }
-    private void readFile(){
+    public boolean init(){
         try(FileReader file = new FileReader("stock.txt");
             BufferedReader reader = new BufferedReader(file)){
             //ignore first line
@@ -40,14 +49,16 @@ public class StockManager {
         }
         catch(IOException e){
             System.out.println(e.getMessage());
+            return false;
         }
+        return true;
     }
     public void addStock(String medicineId, String storeId, int quantity, LocalDate date){
         stockList.add(new Stock(medicineId, storeId, quantity, date));
     }
-    public StockManager(){
+    public StockManager(SystemManager sysMgr){
+        this.sysMgr = sysMgr;
         stockList = new ArrayList<>();
-        readFile();
     }
     public ArrayList<Stock> getStock(String storeId){
         ArrayList<Stock> storeStock = new ArrayList<>();
@@ -58,19 +69,17 @@ public class StockManager {
         return storeStock;
     }
     public static void main(String[] args){
-        StockManager testManager = new StockManager();
+        StockManager testManager = new StockManager(new SystemManager());
         
         //test number of records in file
         assert(testManager.stockList.size() == 6);
         
         //check if all the medicine IDs in the stock are from the medicine list
-        MedicineManager medManager = new MedicineManager();
         for(Stock stock : testManager.stockList)
-            assert(medManager.searchById(stock.getMedicineId()) != null);
+            assert(testManager.sysMgr.searchMedicineInFile(stock.getMedicineId()) != null);
         
         //check if all the store IDs are from the store list
-        StoreManager storeMgr = new StoreManager();
         for(Stock stock : testManager.stockList)
-            assert(storeMgr.searchById(stock.getStoreId()) != null);
+            assert(testManager.sysMgr.searchByStoreId(stock.getStoreId()) != null);
     }
 }

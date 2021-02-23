@@ -5,11 +5,13 @@
 import java.util.*;
 import java.io.*;
 public class StoreManager {
+    private SystemManager sysMgr;
     private ArrayList<Store> storeList;
     private String infoLine;
-    public StoreManager(){
+    
+    public StoreManager(SystemManager sysMgr){
         storeList = new ArrayList<>();
-        readFile();
+        this.sysMgr = sysMgr;
     }
     public boolean writeToFile(){
         try(FileWriter writer = new FileWriter("store.txt");){
@@ -26,7 +28,7 @@ public class StoreManager {
     public ArrayList<Store> getAllStores(){
         return new ArrayList<>(storeList);
     }
-    private boolean readFile(){
+    public boolean init(){
         try(FileReader file = new FileReader("store.txt");
             BufferedReader reader = new BufferedReader(file)){
             //ignore first line
@@ -44,13 +46,20 @@ public class StoreManager {
         return true;
     }
     public Store searchById(String storeId){
-        for(Store store : storeList)
+        for(Store store : storeList){
             if(store.getStoreId().equals(storeId.trim()))
                 return store;
+        }
         return null;
     }
+    public void addStore(String storeId, String storeName, String location){
+        storeList.add(new Store(storeId, storeName, location, false));
+    }
+    
+    //Unit Testing
     public static void main(String[] args){
-        StoreManager testManager = new StoreManager();
+        StoreManager testManager = new StoreManager(new SystemManager());
+        testManager.init();
         
         //test number of records in file
         assert(testManager.storeList.size() == 3);
@@ -70,7 +79,7 @@ public class StoreManager {
         }
         
         //test if all the store IDs are from the file "account.txt"
-        ArrayList<Account> accList = new AccountManager().getAllAccounts();
+        ArrayList<Account> accList = testManager.sysMgr.getAllAccounts();
         for(Store i : testManager.storeList){
             boolean flag = false;
             for(Account j : accList)

@@ -45,12 +45,12 @@ public class LocationManager {
     public static double getDistance(String locationOne, String locationTwo){
         int index1 = -1, index2 = -1;
         for(int i = 0; i < LocationManager.size(); i ++)
-            if(LocationManager.getLocation(i).equals(locationOne.trim())){
+            if(LocationManager.getLocation(i).equalsIgnoreCase(locationOne.trim())){
                 index1 = i;
                 break;
             }
         for(int i = 0; i < LocationManager.size(); i ++)
-            if(LocationManager.getLocation(i).equals(locationTwo.trim())){
+            if(LocationManager.getLocation(i).equalsIgnoreCase(locationTwo.trim())){
                 index2 = i;
                 break;
             }

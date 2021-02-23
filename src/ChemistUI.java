@@ -9,22 +9,14 @@
  * @author Ritwik Basak
  */
 import java.util.*;
-import java.io.*;
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.*;
 import java.time.*;
-//import javafx.util.*;
-public class ChemistUI extends javax.swing.JFrame {
-    private StoreManager  storeMgr = new StoreManager();
-    private MedicineManager medMgr = new MedicineManager();
-    private StockManager stockMgr = new StockManager();
-    private String storeId = "sID 1";
 
-    public void setStoreId(String storeId) {
-        this.storeId = storeId;
-    }
+public class ChemistUI extends javax.swing.JFrame {
     
+    private SystemManager sysMgr;
+    private DisplayManager dispMgr;
     private ArrayList<Stock> storeStock ;
     private int current = 0;
     
@@ -32,7 +24,7 @@ public class ChemistUI extends javax.swing.JFrame {
      * Creates new form ChemistUI
      */
     private void refreshStock(){
-        storeStock = stockMgr.getStock(storeId);
+        storeStock = sysMgr.getStock(sysMgr.getLoginId());
         ArrayList<Stock> nonEmpty = new ArrayList<>();
         for(Stock i : storeStock)
             if(i.getQuantity() != 0)
@@ -101,7 +93,7 @@ public class ChemistUI extends javax.swing.JFrame {
         return true;
     }
     private boolean medicineError(){
-        if(medicineIdField.getText().length() != 0 && medMgr.searchById(medicineIdField.getText()) != null)
+        if(medicineIdField.getText().length() != 0 && sysMgr.searchMedicineInFile(medicineIdField.getText()) != null)
         {
             medicineError.setVisible(false);
             medicineNameError.setVisible(false);
@@ -137,11 +129,24 @@ public class ChemistUI extends javax.swing.JFrame {
         YYYYField.setDocument(new IntegerRangeDocument(0, Integer.MAX_VALUE));
         quantityField.setDocument(new IntegerRangeDocument(0, Integer.MAX_VALUE));
     }
-    public ChemistUI() {
+    public ChemistUI(SystemManager sysMgr, DisplayManager dispMgr) {
+        
         lookSettingCode();
+        this.sysMgr = sysMgr;
+        this.dispMgr = dispMgr;
+        
+        addWindowListener(new WindowAdapter(){
+                public void windowClosing(WindowEvent e){
+                    
+                    setVisible(false);
+                    dispMgr.showHomeUI(true);
+                }
+            }
+        );
         
         initComponents();
         setResizable(false);
+        
         
         refreshStock();
         initializeUpdateInventory();
@@ -154,8 +159,9 @@ public class ChemistUI extends javax.swing.JFrame {
             }
         });
         
-        storeNameField.setText(storeMgr.searchById(storeId).getStoreName());
-        storeIdField.setText(storeId);
+        assert(sysMgr.searchByStoreId(sysMgr.getLoginId()) != null);
+        storeNameField.setText(sysMgr.searchByStoreId(sysMgr.getLoginId()).getStoreName());
+        storeIdField.setText(sysMgr.getLoginId());
         
         storeNameError.setVisible(false);
         
@@ -164,7 +170,7 @@ public class ChemistUI extends javax.swing.JFrame {
         for(int i = 0; i < LocationManager.size(); i ++)
             locationList[i + 1] = LocationManager.getLocation(i);
         locationDropdown.setModel(new javax.swing.DefaultComboBoxModel<>(locationList));
-        locationDropdown.setSelectedIndex(LocationManager.getIndex(storeMgr.searchById(storeId).getLocation()) + 1);
+        locationDropdown.setSelectedIndex(LocationManager.getIndex(sysMgr.searchByStoreId(sysMgr.getLoginId()).getLocation()) + 1);
     }
     
     /**
@@ -211,7 +217,7 @@ public class ChemistUI extends javax.swing.JFrame {
         addButton = new javax.swing.JButton();
         updateInventorySaveButton = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 
         storeNameField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -616,11 +622,12 @@ public class ChemistUI extends javax.swing.JFrame {
     private void saveButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_saveButtonMouseClicked
         // TODO add your handling code here:
         if(storeNameError() | locationError()) return;
-        Store tempStore = storeMgr.searchById(storeId);
+        Store tempStore = sysMgr.searchByStoreId(sysMgr.getLoginId());
         tempStore.setIsVerified(false);
         tempStore.setStoreName(storeNameField.getText());
         tempStore.setLocation(locationDropdown.getItemAt(locationDropdown.getSelectedIndex()));
         JOptionPane.showMessageDialog(this, "Changes have been saved");
+        tabbedPane1.setSelectedIndex(1);
     }//GEN-LAST:event_saveButtonMouseClicked
 
     private boolean storeNameError(){
@@ -717,7 +724,7 @@ public class ChemistUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         boolean flag = medicineError();
         if(flag == false)
-            medicineNameField.setText(medMgr.searchById(medicineIdField.getText()).getName());
+            medicineNameField.setText(sysMgr.searchMedicineInFile(medicineIdField.getText()).getName());
     }//GEN-LAST:event_medicineIdFieldFocusLost
 
     private void quantityFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_quantityFieldFocusLost
@@ -764,7 +771,7 @@ public class ChemistUI extends javax.swing.JFrame {
             updateInventorySaveButton.setText("Save");
         }
         else{
-            stockMgr.addStock(medicineIdField.getText(), storeId, Integer.parseInt(quantityField.getText()), LocalDate.of(Integer.parseInt(YYYYField.getText()), Integer.parseInt(MMField.getText()), Integer.parseInt(DDField.getText())));
+            sysMgr.addStock(medicineIdField.getText(), sysMgr.getLoginId(), Integer.parseInt(quantityField.getText()), LocalDate.of(Integer.parseInt(YYYYField.getText()), Integer.parseInt(MMField.getText()), Integer.parseInt(DDField.getText())));
             refreshStock();
         }
         hideAll();
@@ -775,7 +782,7 @@ public class ChemistUI extends javax.swing.JFrame {
 
     private void displayCurrentStock(){
         Stock currentStock = storeStock.get(current);
-        medicineNameField.setText(medMgr.searchById(currentStock.getMedicineId()).getName());
+        medicineNameField.setText(sysMgr.searchMedicineInFile(currentStock.getMedicineId()).getName());
         medicineIdField.setText(currentStock.getMedicineId());
         quantityField.setText(currentStock.getQuantity() + "");
         LocalDate currentDate = currentStock.getDate();
@@ -833,16 +840,17 @@ public class ChemistUI extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
+    /*
     public static void main(String args[]) {
         
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new ChemistUI().setVisible(true);
             }
         });
     }
-
+    */
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField DDField;
     private javax.swing.JLabel DDLabel;

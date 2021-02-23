@@ -50,6 +50,6 @@ public class Stock {
     }
     
     public String toString(){
-        return medicineId + ";" + quantity + ";" + date.getDayOfMonth() + "." + date.getMonth() + "." + date.getYear() + ";" + storeId;
+        return medicineId + ";" + quantity + ";" + date.getDayOfMonth() + "." + date.getMonthValue() + "." + date.getYear() + ";" + storeId;
     }
 }

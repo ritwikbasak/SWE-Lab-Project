@@ -5,6 +5,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.util.regex.Pattern;
 import javax.swing.JOptionPane;
 
@@ -23,7 +25,9 @@ public class CustomerRegistrationUI extends javax.swing.JFrame {
     /**
      * Creates new form CustomerRegistrationUI
      */
-    private AccountManager accMgr = new AccountManager();
+    private SystemManager sysMgr;
+    private DisplayManager dispMgr;
+    
     private void lookSettingCode(){
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -34,10 +38,22 @@ public class CustomerRegistrationUI extends javax.swing.JFrame {
             }
         } catch (Exception e) {}
     }
-    public CustomerRegistrationUI() {
+    public CustomerRegistrationUI(SystemManager sysMgr, DisplayManager dispMgr) {
         lookSettingCode();
         
         initComponents();
+        
+        this.sysMgr = sysMgr;
+        this.dispMgr = dispMgr;
+        
+        addWindowListener(new WindowAdapter(){
+                public void windowClosing(WindowEvent e){
+                    
+                    setVisible(false);
+                    dispMgr.showHomeUI(true);
+                }
+            }
+        );
         
         mobileField.setDocument(new LongRangeDocument(0, Long.MAX_VALUE, true));
         
@@ -144,7 +160,8 @@ public class CustomerRegistrationUI extends javax.swing.JFrame {
     private void registerClicked(MouseEvent me){
         if(loginError() | emailError() | mobileError() | passwordError() | cnfPasswordError() | locationError()) return;
         JOptionPane.showMessageDialog(this, "Customer Account Created");
-        accMgr.addCustomerAccount(loginField.getText(), emailField.getText(), mobileField.getText(), passwordField.getText(), locationDropdown.getItemAt(locationDropdown.getSelectedIndex()));
+        sysMgr.addCustomerAccount(loginField.getText(), emailField.getText(), mobileField.getText(), passwordField.getText(), locationDropdown.getItemAt(locationDropdown.getSelectedIndex()));
+        dispatchEvent(new WindowEvent(this, WindowEvent.WINDOW_CLOSING));
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -174,7 +191,7 @@ public class CustomerRegistrationUI extends javax.swing.JFrame {
         locationDropdown = new javax.swing.JComboBox<>();
         locationError = new javax.swing.JLabel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         setTitle("Create Account");
         setResizable(false);
 
@@ -322,7 +339,7 @@ public class CustomerRegistrationUI extends javax.swing.JFrame {
             loginError.setVisible(true);
             return true;
         }
-        if(accMgr.searchByLoginId(loginField.getText()) != null){
+        if(sysMgr.searchByLoginId(loginField.getText()) != null){
             loginError.setText("Username Already Present");
             loginError.setVisible(true);
             return true;
@@ -386,15 +403,16 @@ public class CustomerRegistrationUI extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
+    /*
     public static void main(String args[]) {
         
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new CustomerRegistrationUI().setVisible(true);
             }
         });
     }
+    */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel cnfPasswordError;

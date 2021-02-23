@@ -5,13 +5,14 @@
 import java.util.*;
 import java.io.*;
 public class MedicineManager {
+    private SystemManager sysMgr;
     private ArrayList<Medicine> medicineList;
     private String infoLine;
-    public MedicineManager(){
+    public MedicineManager(SystemManager sysMgr){
+        this.sysMgr = sysMgr;
         medicineList = new ArrayList<>();
-        readFile();
     }
-    public void writeToFile(){
+    public boolean writeToFile(){
         try(FileWriter writer = new FileWriter("medicine.txt");){
             writer.write(infoLine + "\n");
             for(Medicine i : medicineList)
@@ -19,16 +20,18 @@ public class MedicineManager {
         }
         catch(IOException e){
             System.out.println(e.getMessage());
+            return false;
         }
+        return true;
     }
     public ArrayList<Medicine> searchByMedicineName(String medName){
         ArrayList<Medicine> res = new ArrayList<>();
         for(Medicine i : medicineList)
-            if(i.getName().equalsIgnoreCase(medName))
+            if(i.getName().equalsIgnoreCase(medName.trim()))
                 res.add(i);
         return res;
     }
-    private void readFile(){
+    public boolean init(){
         try(FileReader file = new FileReader("medicine.txt");
             BufferedReader reader = new BufferedReader(file)){
             //ignore first line
@@ -41,8 +44,11 @@ public class MedicineManager {
         }
         catch(IOException e){
             System.out.println(e.getMessage());
+            return false;
         }
+        return true;
     }
+    
     public Medicine searchById(String id){
         for(Medicine med : medicineList){
             if(med.getId().equals(id.trim()))
@@ -50,8 +56,9 @@ public class MedicineManager {
         }
         return null;
     }
+    
     public static void main(String[] args){
-        MedicineManager testManager = new MedicineManager();
+        MedicineManager testManager = new MedicineManager(new SystemManager());
         
         //test number of records in file
         assert(testManager.medicineList.size() == 11);

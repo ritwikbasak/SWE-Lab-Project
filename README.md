@@ -7,3 +7,5 @@
 5.	LocationManager
 6.	Store
 7.	StoreManager
+8.	DisplayManager
+9.	SystemManager
