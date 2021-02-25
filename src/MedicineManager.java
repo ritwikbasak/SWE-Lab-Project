@@ -13,7 +13,7 @@ public class MedicineManager {
         medicineList = new ArrayList<>();
     }
     public boolean writeToFile(){
-        try(FileWriter writer = new FileWriter("medicine.txt");){
+        try(FileWriter writer = new FileWriter(SystemManager.FILE_PATH + "medicine.txt");){
             writer.write(infoLine + "\n");
             for(Medicine i : medicineList)
                 writer.write(i + "\n");
@@ -32,7 +32,7 @@ public class MedicineManager {
         return res;
     }
     public boolean init(){
-        try(FileReader file = new FileReader("medicine.txt");
+        try(FileReader file = new FileReader(SystemManager.FILE_PATH + "medicine.txt");
             BufferedReader reader = new BufferedReader(file)){
             //ignore first line
             infoLine = reader.readLine();

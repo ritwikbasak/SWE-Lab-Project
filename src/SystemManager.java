@@ -12,6 +12,8 @@ public class SystemManager {
     private StoreManager storeMgr;
     private StockManager stockMgr;
     private DisplayManager dispMgr;
+    public static final String FILE_PATH = "data/";
+    
     private String loginId = "INVALID";//set "INVALID"
 
     public String getLoginId() {
@@ -97,7 +99,7 @@ public class SystemManager {
         }
         catch(Exception e){
             System.out.println(e.getMessage());
-            JOptionPane.showMessageDialog(null, "Program Terminated : ", "", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "Program Terminated : " + e.getMessage(), "", JOptionPane.ERROR_MESSAGE);
         }
     }
 }

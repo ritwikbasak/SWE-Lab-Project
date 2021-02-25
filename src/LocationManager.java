@@ -8,7 +8,7 @@ public class LocationManager {
     private static double distances[][];
     static{
         distances = new double[LocationManager.size()][LocationManager.size()];
-        try(FileReader file = new FileReader("location.txt");
+        try(FileReader file = new FileReader(SystemManager.FILE_PATH + "location.txt");
             BufferedReader reader = new BufferedReader(file)){
             String oneLine;
             int i = 0;

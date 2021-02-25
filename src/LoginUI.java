@@ -168,8 +168,13 @@ public class LoginUI extends javax.swing.JFrame {
         }
         if(!a.equals("Admin")){
             sysMgr.setLoginId(t.getLoginId());
-            if(t.isIsChemist())
+            if(t.isIsChemist()){
+                if(!sysMgr.searchByStoreId(t.getLoginId()).isVerified()){
+                    JOptionPane.showMessageDialog(this, "Store Not Yet Verified By Admin", "", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
                 dispMgr.showChemistUI(true);
+            }
             else
                 dispMgr.showSearchForMedicine(true);
         }

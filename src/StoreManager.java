@@ -14,7 +14,7 @@ public class StoreManager {
         this.sysMgr = sysMgr;
     }
     public boolean writeToFile(){
-        try(FileWriter writer = new FileWriter("store.txt");){
+        try(FileWriter writer = new FileWriter(SystemManager.FILE_PATH + "store.txt");){
             writer.write(infoLine + "\n");
             for(Store i : storeList)
                 writer.write(i + "\n");
@@ -29,7 +29,7 @@ public class StoreManager {
         return new ArrayList<>(storeList);
     }
     public boolean init(){
-        try(FileReader file = new FileReader("store.txt");
+        try(FileReader file = new FileReader(SystemManager.FILE_PATH + "store.txt");
             BufferedReader reader = new BufferedReader(file)){
             //ignore first line
             infoLine = reader.readLine();

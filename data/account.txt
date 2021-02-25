@@ -4,3 +4,4 @@ login 2;false;email2@email.com;+919999900000;xxxxx;SALT LAKE
 sID 3;true;email3@email.com;+919999900000;xxxxx;NEW TOWN
 sID 2;true;email3@email.com;+919999900000;xxxxx;NEW TOWN
 ritam ghosh;false;ritam@gmail.com;9999900000;abc123AB;SALT LAKE
+store id 10000;true;email@email.com;9999900000;abc123AB;NEW TOWN
