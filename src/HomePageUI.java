@@ -20,13 +20,13 @@ public class HomePageUI extends javax.swing.JFrame {
      * Creates new form HomePageUI
      */
     private void displayText(String filename){
-        JTextArea textArea = new JTextArea();
+        JTextArea textArea = new JTextArea(400, 300);
         textArea.setEditable(false);
         JScrollPane scrollableTextArea = new JScrollPane(textArea);
         scrollableTextArea.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
         scrollableTextArea.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
         
-        try(FileReader file = new FileReader(SystemManager.FILE_PATH + filename + ".txt");
+        try(FileReader file = new FileReader(filename + ".txt");
             BufferedReader reader = new BufferedReader(file)){
             String oneLine;
             while((oneLine = reader.readLine()) != null){
@@ -42,7 +42,7 @@ public class HomePageUI extends javax.swing.JFrame {
                     frame.dispose();
                 }
             });
-            frame.getContentPane().setLayout(new java.awt.GridLayout(1, 1));
+            frame.getContentPane().setLayout(new FlowLayout());
             frame.getContentPane().add(scrollableTextArea);
             frame.setVisible(true);
         }

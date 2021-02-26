@@ -20,15 +20,8 @@ public class ManageStore extends javax.swing.JFrame {
     private SystemManager sysMgr;
     private DisplayManager dispMgr;
     private ArrayList<Store> storeList;
-    private ArrayList<JCheckBox> checkboxList;
-    private ArrayList<Store> newStores;
-    private boolean windowFlag;
-    private void toggleWindowFlag(){
-        windowFlag = !windowFlag;
-    }
-    private boolean getWindowFlag(){
-        return windowFlag;
-    }
+    ArrayList<JCheckBox> checkboxList;
+    ArrayList<Store> newStores;
     private void lookSettingCode(){
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
@@ -42,27 +35,21 @@ public class ManageStore extends javax.swing.JFrame {
     public ManageStore(SystemManager sysMgr, DisplayManager dispMgr) {
         this.sysMgr = sysMgr;
         this.dispMgr = dispMgr;
-        windowFlag = false;
+        
         addWindowListener(new WindowAdapter(){
                 public void windowClosing(WindowEvent e){
-                    toggleWindowFlag();
+                    
                     setVisible(false);
                     dispMgr.showHomeUI(true);
-                }
-                public void windowActivated(WindowEvent e){
-                    if(getWindowFlag())
-                        return;
-                    toggleWindowFlag();
-                    storeList = sysMgr.getAllStores();
-                    showExistingStores();
-                    showUnverifiedStores();
                 }
             }
         );
         
         lookSettingCode();
         initComponents();
-        
+        storeList = sysMgr.getAllStores();
+        showExistingStores();
+        showUnverifiedStores();
     }
 
     private String getSpaces(int i){
@@ -92,8 +79,6 @@ public class ManageStore extends javax.swing.JFrame {
         existingStoresPanel.setVisible(true);
     }
     private void verifyClicked(){
-        if(!verify.isEnabled())
-            return;
         boolean flag = false;
         for(int i = 0; i < checkboxList.size(); i ++){
             if(checkboxList.get(i).isSelected()){
@@ -118,12 +103,12 @@ public class ManageStore extends javax.swing.JFrame {
         if(newStores.size() == 0){
             clearSelection.setEnabled(false);
             verify.setEnabled(false);
-            selectAll.setEnabled(false);
+            verifyAll.setEnabled(false);
         }
         else{
             clearSelection.setEnabled(true);
             verify.setEnabled(true);
-            selectAll.setEnabled(true);
+            verifyAll.setEnabled(true);
         }
         checkboxList = new ArrayList<>();
         for(Store i : newStores)
@@ -158,7 +143,7 @@ public class ManageStore extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         clearSelection = new javax.swing.JButton();
-        selectAll = new javax.swing.JButton();
+        verifyAll = new javax.swing.JButton();
         verify = new javax.swing.JButton();
         newStoresPanel = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
@@ -211,10 +196,10 @@ public class ManageStore extends javax.swing.JFrame {
             }
         });
 
-        selectAll.setText("SELECT ALL");
-        selectAll.addMouseListener(new java.awt.event.MouseAdapter() {
+        verifyAll.setText("VERIFY ALL");
+        verifyAll.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                selectAllMouseClicked(evt);
+                verifyAllMouseClicked(evt);
             }
         });
 
@@ -246,8 +231,8 @@ public class ManageStore extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addGap(160, 160, 160)
                 .addComponent(clearSelection)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
-                .addComponent(selectAll)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                .addComponent(verifyAll)
                 .addGap(30, 30, 30)
                 .addComponent(verify)
                 .addGap(18, 18, 18))
@@ -268,7 +253,7 @@ public class ManageStore extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(clearSelection)
-                    .addComponent(selectAll)
+                    .addComponent(verifyAll)
                     .addComponent(verify))
                 .addContainerGap())
         );
@@ -295,11 +280,12 @@ public class ManageStore extends javax.swing.JFrame {
             i.setSelected(false);
     }//GEN-LAST:event_clearSelectionMouseClicked
 
-    private void selectAllMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_selectAllMouseClicked
+    private void verifyAllMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_verifyAllMouseClicked
         // TODO add your handling code here:
         for(JCheckBox i : checkboxList)
             i.setSelected(true);
-    }//GEN-LAST:event_selectAllMouseClicked
+        verifyClicked();
+    }//GEN-LAST:event_verifyAllMouseClicked
 
     private void verifyMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_verifyMouseClicked
         // TODO add your handling code here:
@@ -329,7 +315,7 @@ public class ManageStore extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JPanel newStoresPanel;
-    private javax.swing.JButton selectAll;
     private javax.swing.JButton verify;
+    private javax.swing.JButton verifyAll;
     // End of variables declaration//GEN-END:variables
 }

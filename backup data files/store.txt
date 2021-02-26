@@ -1,4 +1,5 @@
 store name;store location;store id;is Store Verified
-s1;SALT LAKE;sID 1;true
-s2;HOWRAH;sID 2;false
+s1abc;HOWRAH;sID 1;true
+s2;HOWRAH;sID 2;true
 s1;SALT LAKE;sID 3;true
+abc stores;NEW TOWN;store id 10000;false

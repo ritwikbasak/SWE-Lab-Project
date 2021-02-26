@@ -17,7 +17,7 @@ public class StockManager {
         return medStock;
     }
     public boolean writeToFile(){
-        try(FileWriter writer = new FileWriter(SystemManager.FILE_PATH + "stock.txt");){
+        try(FileWriter writer = new FileWriter("stock.txt");){
             writer.write(infoLine + "\n");
             for(Stock i : stockList)
                 if(i.getQuantity() != 0)
@@ -37,7 +37,7 @@ public class StockManager {
         return medStock;
     }
     public boolean init(){
-        try(FileReader file = new FileReader(SystemManager.FILE_PATH + "stock.txt");
+        try(FileReader file = new FileReader("stock.txt");
             BufferedReader reader = new BufferedReader(file)){
             //ignore first line
             infoLine = reader.readLine();

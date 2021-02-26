@@ -148,10 +148,12 @@ public class LoginUI extends javax.swing.JFrame {
     private void dropdownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dropdownActionPerformed
         // TODO add your handling code here:
         String t = dropdown.getItemAt(dropdown.getSelectedIndex());
+        //if admin then disable user name and pasword field.
         if(t.equals("Admin")){
             nameField.setEnabled(false);
             passwordField.setEnabled(false);
         }
+        //if not admin then enable fields for user name and password
         else{
             nameField.setEnabled(true);
             passwordField.setEnabled(true);
@@ -162,20 +164,19 @@ public class LoginUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         Account t = sysMgr.searchByLoginId(nameField.getText().trim());
         String a = dropdown.getItemAt(dropdown.getSelectedIndex());
+        //code for wrong user name/ password
         if(!a.equals("Admin") && (t == null || !t.getPassword().equals(passwordField.getText()))){
             JOptionPane.showMessageDialog(this, "Invalid Username or Password", "", JOptionPane.ERROR_MESSAGE);
             return;
         }
         if(!a.equals("Admin")){
             sysMgr.setLoginId(t.getLoginId());
-            if(t.isIsChemist()){
-                if(!sysMgr.searchByStoreId(t.getLoginId()).isVerified()){
-                    JOptionPane.showMessageDialog(this, "Store Not Yet Verified By Admin", "", JOptionPane.WARNING_MESSAGE);
-                    return;
-                }
+            //checks is chemist field from csv
+            if(t.isIsChemist())
+                //if isChemist=true then show chemist UI
                 dispMgr.showChemistUI(true);
-            }
             else
+                //if isChemist=false then show searchformedicine UI
                 dispMgr.showSearchForMedicine(true);
         }
         else{

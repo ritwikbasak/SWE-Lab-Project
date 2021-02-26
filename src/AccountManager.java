@@ -13,7 +13,7 @@ public class AccountManager {
         accountList = new ArrayList<>();
     }
     public boolean writeToFile(){
-        try(FileWriter writer = new FileWriter(SystemManager.FILE_PATH + "account.txt");){
+        try(FileWriter writer = new FileWriter("account.txt");){
             writer.write(infoLine + "\n");
             for(Account i : accountList)
                 writer.write(i + "\n");
@@ -25,7 +25,7 @@ public class AccountManager {
         return true;
     }
     public boolean init(){
-        try(FileReader file = new FileReader(SystemManager.FILE_PATH + "account.txt");
+        try(FileReader file = new FileReader("account.txt");
             BufferedReader reader = new BufferedReader(file)){
             //ignore first line
             infoLine = reader.readLine();

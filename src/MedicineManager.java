@@ -13,7 +13,7 @@ public class MedicineManager {
         medicineList = new ArrayList<>();
     }
     public boolean writeToFile(){
-        try(FileWriter writer = new FileWriter(SystemManager.FILE_PATH + "medicine.txt");){
+        try(FileWriter writer = new FileWriter("medicine.txt");){
             writer.write(infoLine + "\n");
             for(Medicine i : medicineList)
                 writer.write(i + "\n");
@@ -32,7 +32,7 @@ public class MedicineManager {
         return res;
     }
     public boolean init(){
-        try(FileReader file = new FileReader(SystemManager.FILE_PATH + "medicine.txt");
+        try(FileReader file = new FileReader("medicine.txt");
             BufferedReader reader = new BufferedReader(file)){
             //ignore first line
             infoLine = reader.readLine();
@@ -61,7 +61,7 @@ public class MedicineManager {
         MedicineManager testManager = new MedicineManager(new SystemManager());
         
         //test number of records in file
-        assert(testManager.medicineList.size() == 11);
+        assert(testManager.medicineList.size() == 132);
         
         //check if all medicine ids are unique
         for(Medicine med : testManager.medicineList){

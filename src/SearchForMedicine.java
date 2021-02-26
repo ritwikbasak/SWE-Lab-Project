@@ -42,6 +42,7 @@ public class SearchForMedicine extends javax.swing.JFrame {
             double dist = LocationManager.getDistance(loc, a1.getLocation());
             if(dist > Long.parseLong(radiusField.getText().trim()))
                 continue;
+            //code to display list of results in pane
             String[] arr = new String[4];
             arr[0] = t;
             arr[1] = a1.getStoreName();
@@ -57,6 +58,7 @@ public class SearchForMedicine extends javax.swing.JFrame {
     }
     private String calculateAvailability(int qty){
         String res;
+        //code to display the last field
         if(qty >= HIGH_AVAILABILITY)
             res = "HIGH";
         else if(qty >= MEDIUM_AVAILABILITY)
