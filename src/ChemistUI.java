@@ -800,6 +800,17 @@ public class ChemistUI extends javax.swing.JFrame {
     }
     private void editButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_editButtonMouseClicked
         // TODO add your handling code here:
+        //Bug Fix : Nothing Shown In "EDIT EXISTING STOCK" If Store Does Not Have Any Stock
+        //Test Case Number : 2.3.2
+        /**
+         * If the store stock is empty:
+         * No action would be performed on clicking the "Edit Existing Stock" button.
+         */
+        if(storeStock.size() == 0){
+            JOptionPane.showMessageDialog(this, "No Stock Present To Edit", "", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        //End Bug Fix : Nothing Shown In "EDIT EXISTING STOCK" If Store Does Not Have Any Stock
         current = 0;
         medicineIdField.setEditable(false);
         addButton.setVisible(false);

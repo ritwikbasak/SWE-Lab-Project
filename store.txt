@@ -1,7 +1,0 @@
-store name;store location;store id;is Store Verified
-Ghose Pharmacy;HOWRAH;sID 1;true
-Atul Medical;SALT LAKE;sID 2;true
-Apollo Chemists;ULTADANGA;sID 3;true
-Romanco Chemists;SALT LAKE;sID 4;true
-Cyrion Chemists;NEW TOWN;sID 5;true
-Genesis Medicals;NEW TOWN;sID 6;false

@@ -1,4 +1,6 @@
 
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.JOptionPane;
@@ -26,6 +28,22 @@ public class LoginUI extends javax.swing.JFrame {
         lookSettingCode();
         initComponents();
         
+        nameField.addKeyListener(new KeyAdapter(){
+            public void keyPressed(KeyEvent evt){
+                if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+                    nameField.setFocusable(false);
+                    nameField.setFocusable(true);
+                }
+            }
+        });
+        passwordField.addKeyListener(new KeyAdapter(){
+            public void keyPressed(KeyEvent evt){
+                if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+                    passwordField.setFocusable(false);
+                    passwordField.setFocusable(true);
+                }
+            }
+        });
         addWindowListener(new WindowAdapter(){
                 public void windowClosing(WindowEvent e){
                     
@@ -148,12 +166,10 @@ public class LoginUI extends javax.swing.JFrame {
     private void dropdownActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_dropdownActionPerformed
         // TODO add your handling code here:
         String t = dropdown.getItemAt(dropdown.getSelectedIndex());
-        //if admin then disable user name and pasword field.
         if(t.equals("Admin")){
             nameField.setEnabled(false);
             passwordField.setEnabled(false);
         }
-        //if not admin then enable fields for user name and password
         else{
             nameField.setEnabled(true);
             passwordField.setEnabled(true);
@@ -164,19 +180,27 @@ public class LoginUI extends javax.swing.JFrame {
         // TODO add your handling code here:
         Account t = sysMgr.searchByLoginId(nameField.getText().trim());
         String a = dropdown.getItemAt(dropdown.getSelectedIndex());
-        //code for wrong user name/ password
         if(!a.equals("Admin") && (t == null || !t.getPassword().equals(passwordField.getText()))){
             JOptionPane.showMessageDialog(this, "Invalid Username or Password", "", JOptionPane.ERROR_MESSAGE);
             return;
         }
         if(!a.equals("Admin")){
             sysMgr.setLoginId(t.getLoginId());
-            //checks is chemist field from csv
-            if(t.isIsChemist())
-                //if isChemist=true then show chemist UI
+            if(t.isIsChemist()){
+                //Bug Fix : Un-Verified Stores Allowed To Log-In To Their Account
+                //Test Case Number : 2.1.5
+                /**
+                 * If the store is not yet verified by the Admin:
+                 * The Chemist cannot login to their account.
+                 */
+                if(!sysMgr.searchByStoreId(t.getLoginId()).isVerified()){
+                    JOptionPane.showMessageDialog(this, "Store Not Yet Verified By Admin", "", JOptionPane.WARNING_MESSAGE);
+                    return;
+                }
+                //End Bug Fix : Un-Verified Stores Allowed To Log-In To Their Account
                 dispMgr.showChemistUI(true);
+            }
             else
-                //if isChemist=false then show searchformedicine UI
                 dispMgr.showSearchForMedicine(true);
         }
         else{

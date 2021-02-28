@@ -115,8 +115,8 @@
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace min="-2" pref="160" max="-2" attributes="0"/>
                       <Component id="clearSelection" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="32" max="32767" attributes="0"/>
-                      <Component id="verifyAll" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="30" max="32767" attributes="0"/>
+                      <Component id="selectAll" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                       <Component id="verify" min="-2" max="-2" attributes="0"/>
                       <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
@@ -141,7 +141,7 @@
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="clearSelection" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="verifyAll" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="selectAll" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="verify" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -158,12 +158,12 @@
                 <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="clearSelectionMouseClicked"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JButton" name="verifyAll">
+            <Component class="javax.swing.JButton" name="selectAll">
               <Properties>
-                <Property name="text" type="java.lang.String" value="VERIFY ALL"/>
+                <Property name="text" type="java.lang.String" value="SELECT ALL"/>
               </Properties>
               <Events>
-                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="verifyAllMouseClicked"/>
+                <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="selectAllMouseClicked"/>
               </Events>
             </Component>
             <Component class="javax.swing.JButton" name="verify">

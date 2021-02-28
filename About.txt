@@ -1,6 +1,0 @@
-MEDICINE AVAILABILITY SOFTWARE:-
-Our software aims at providing our users with the accurate information regarding the availability of medicines in pharmaceutical shops near him.
-Our system will direct customers to their nearest medical shop that meet their requirements. Hence they can save a lot of crucial time and hassle.
-The chemist can routinely update the stock available with him of the various medicines which is reflected on the user’s end. This would enable the 
-user to search for the required medicine and the information of the availability of the medicine would be reflected along with the location of the
-medical shop.

@@ -7,14 +7,5 @@ ritam ghosh;false;ritam16@gmail.com;7603028985;xxxxx;NEW TOWN
 sID 4;true;getromanco@email.com;+919999900000;xxxxx;SALT LAKE
 ritwik;false;ritwik91@gmail.com;8830228985;xxxxx;ULTADANGA
 rohit;false;basu241@gmail.com;7603063652;xxxxx;NEW TOWN
-sID 5;true;cyrion@gmail.com;+919432353608;xxxxx;NEW TOWN 
-sID 6;true;genesis@gmail.com;+919432354458;xxxxx;NEW TOWN 
-
-
-
-
-
-
-
-
-
+sID 5;true;cyrion@gmail.com;+919432353608;xxxxx;NEW TOWN
+sID 6;true;genesis@gmail.com;+919432354458;xxxxx;NEW TOWN
