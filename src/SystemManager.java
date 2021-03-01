@@ -70,7 +70,7 @@ public class SystemManager {
         medMgr = new MedicineManager(this);
         storeMgr = new StoreManager(this);
         stockMgr = new StockManager(this);
-        boolean flag = accMgr.init() | medMgr.init() | storeMgr.init() | stockMgr.init();
+        boolean flag = accMgr.init() & medMgr.init() & storeMgr.init() & stockMgr.init();
         if(flag == false){
             dispMgr.showError("Initialization Failed");
             System.exit(0);
@@ -81,7 +81,7 @@ public class SystemManager {
         return true;
     }
     public boolean flushData(){
-        boolean flag = accMgr.writeToFile() | medMgr.writeToFile() | storeMgr.writeToFile() | stockMgr.writeToFile();
+        boolean flag = accMgr.writeToFile() & medMgr.writeToFile() & storeMgr.writeToFile() & stockMgr.writeToFile();
         if(flag == false){
             dispMgr.showError("Failed To Save Data");
         }
